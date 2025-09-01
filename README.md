@@ -36,11 +36,11 @@ RX003,2024-01-17,11122233344,123456,SP,Lorazepam,true,1mg,12/12h,30,1cp as 7h e 
 - medication: obrigatório
 - controlled: boolean (quando vazio considerar false)
 - dosage: obrigatório
-- frequency: obrigatório
+- duration: obrigatório
 - days: número positivo
 
 **Regras de Negócio:**
-- frequency: duração máxima de 90 dias
+- duration: duração máxima de 90 dias
 - date: não pode ser futura
 - Medicamentos controlados (controlled=true) requerem observações
 - Medicamentos controlados (controlled=true) têm frequency máxima de 60 dias
