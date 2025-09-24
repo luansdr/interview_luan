@@ -10,7 +10,7 @@ Uma clínica precisa digitalizar suas prescrições históricas. Eles têm arqui
 
 ## Estrutura do CSV de Entrada
 ```csv
-id,date,patient_cpf,doctor_crm,doctor_uf,medication,controlled,dosage,days,duration,notes
+id,date,patient_cpf,doctor_crm,doctor_uf,medication,controlled,dosage,frequency,duration,notes
 RX001,2024-01-15,12345678901,123456,SP,Dipirona Sódica,false,500mg,8/8h,7,Tomar após as refeições
 RX002,2024-01-16,98765432109,789012,RJ,Amoxicilina,false,875mg,12/12h,10,
 RX003,2024-01-17,11122233344,123456,SP,Lorazepam,true,1mg,12/12h,30,1cp as 7h e as 19h
@@ -37,7 +37,7 @@ RX003,2024-01-17,11122233344,123456,SP,Lorazepam,true,1mg,12/12h,30,1cp as 7h e 
 - controlled: boolean (quando vazio considerar false)
 - dosage: obrigatório
 - duration: obrigatório
-- days: número positivo
+- frequency: número positivo
 
 **Regras de Negócio:**
 - duration: duração máxima de 90 dias
