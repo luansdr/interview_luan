@@ -84,14 +84,12 @@ export class PrescriptionsService {
     const seen = new Set<string>();
     const today = new Date(todayISO()).getTime();
 
-    this.log.log(`upload=${upload_id} parsing CSV`);
-    const rows = await this.fileService.processCsv(buffer);
-    s.total_records = rows.length;
-    this.log.log(`upload=${upload_id} total_records=${s.total_records}`);
+    let processed = 0;
+    let valid = 0;
 
-    for (let i = 0; i < rows.length; i++) {
-      const line = i + 2;
-      const row = rows[i];
+    const maxErrors = 10000;
+
+    await this.fileService.streamCsv(buffer, (row, line) => {
       const csvId = String(row['id'] ?? '').trim();
       const date = String(row['date'] ?? '').trim();
       const patientCpfRaw = String(row['patient_cpf'] ?? '').trim();
@@ -169,14 +167,14 @@ export class PrescriptionsService {
       const duration = parseInt(durationRaw, 10);
       if (!durationRaw)
         errs.push({ line, field: 'duration', message: 'Obrigatório' });
-      else if (!Number.isFinite(duration) || duration <= 0) {
+      else if (!Number.isFinite(duration) || duration <= 0)
         errs.push({
           line,
           field: 'duration',
           message: 'Deve ser número positivo',
           value: durationRaw,
         });
-      } else {
+      else {
         if (duration > 90)
           errs.push({
             line,
@@ -195,7 +193,6 @@ export class PrescriptionsService {
 
       if (frequencyRaw === '')
         errs.push({ line, field: 'frequency', message: 'Obrigatório' });
-
       if (controlled && !notesRaw)
         errs.push({
           line,
@@ -221,7 +218,7 @@ export class PrescriptionsService {
       }
 
       if (errs.length) {
-        s.errors.push(...errs);
+        if (s.errors.length < maxErrors) s.errors.push(...errs);
       } else {
         DB.prescriptionsByCsvId.set(csvId, {
           csvId,
@@ -238,14 +235,17 @@ export class PrescriptionsService {
           notes: notesRaw || null,
           createdAt: new Date().toISOString(),
         });
-        s.valid_records += 1;
+        valid += 1;
+        seen.add(csvId);
       }
 
-      s.processed_records += 1;
-      seen.add(csvId);
+      processed += 1;
+      s.processed_records = processed;
+      s.valid_records = valid;
+      if (processed % 1000 === 0) this.jobs.set(upload_id, s);
+    });
 
-    }
-
+    s.total_records = processed;
     s.status = 'completed';
     this.jobs.set(upload_id, s);
     const elapsed = Date.now() - start;

@@ -1,19 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import * as csv from 'csv-parser';
 import { Readable } from 'stream';
+import * as csv from 'csv-parser';
 
 @Injectable()
 export class FileService {
-  async processCsv(buffer: Buffer): Promise<any[]> {
-    const results: any[] = [];
-    const stream = Readable.from([buffer]);
-
+  async streamCsv(
+    buffer: Buffer,
+    onRow: (row: Record<string, any>, line: number) => Promise<void> | void,
+  ): Promise<number> {
+    let line = 1;
     return new Promise((resolve, reject) => {
+      const stream = Readable.from(buffer);
       stream
-        .on('error', reject)
         .pipe(csv())
-        .on('data', (row) => results.push(row))
-        .on('end', () => resolve(results))
+        .on('data', async (row) => {
+          line += 1;
+          try { await onRow(row, line); } catch (e) { stream.destroy(e as Error); }
+        })
+        .on('end', () => resolve(line - 1))
         .on('error', reject);
     });
   }

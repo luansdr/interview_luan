@@ -24,6 +24,7 @@ export class PrescriptionsController {
       cb(ok ? null : new BadRequestException('Tipo de arquivo inválido'), ok);
     },
   }))
+  
   @HttpCode(HttpStatus.ACCEPTED)
   async upload(@UploadedFile() file: Express.Multer.File) {
     if (!file) throw new BadRequestException('Arquivo nao enviado, deve-se enviar um arquivo CSV com o nome file');
