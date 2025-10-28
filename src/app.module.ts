@@ -5,6 +5,7 @@ import { FileService } from './services/file-service.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrescriptionsModule } from './prescriptions/prescriptions.module';
 import { Prescription } from './prescriptions/entities/prescription.entity';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -14,7 +15,9 @@ import { Prescription } from './prescriptions/entities/prescription.entity';
       entities: [Prescription],
       synchronize: true,
     }),
-    PrescriptionsModule],
+    PrescriptionsModule,
+    HealthModule
+  ],
   controllers: [AppController],
   providers: [AppService, FileService],
 })
