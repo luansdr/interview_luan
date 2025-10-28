@@ -1,0 +1,372 @@
+{
+	"info": {
+		"_postman_id": "7772f810-5766-4c07-a753-d9c6353c7ad8",
+		"name": "mevo_interview_luan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23680501"
+	},
+	"item": [
+		{
+			"name": "prescriptions",
+			"item": [
+				{
+					"name": "async upload csv",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(responseBody){",
+									"    var response = JSON.parse(responseBody)",
+									"    pm.environment.set(\"upload_id\", response.upload_id)",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/luan_reis/Developer/entrevista/dGVzdGU6bWV2b2JhY2tlbmQ/prescricoes.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/api/prescriptions/upload",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"prescriptions",
+								"upload"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "400",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/prescriptions/upload",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"prescriptions",
+										"upload"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "119"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"77-wYmOBmK80UORBs9IhnvI/w5pyBU\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 28 Oct 2025 19:44:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Arquivo nao enviado, deve-se enviar um arquivo CSV com o nome file\",\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+						},
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/Users/luan_reis/Developer/entrevista/dGVzdGU6bWV2b2JhY2tlbmQ/prescricoes.csv"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/prescriptions/upload",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"prescriptions",
+										"upload"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "144"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"90-3Cm/Wgt7bbSV+CCq5WdcjSDwv5A\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 28 Oct 2025 19:44:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"upload_id\": \"897bd52f-156f-4621-809a-382872b1590e\",\n    \"status\": \"processing\",\n    \"total_records\": 0,\n    \"processed_records\": 0,\n    \"valid_records\": 0,\n    \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "get status: id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/prescriptions/upload/{{upload_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"prescriptions",
+								"upload",
+								"{{upload_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/prescriptions/upload/{{upload_id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"prescriptions",
+										"upload",
+										"{{upload_id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "792"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"318-nNNBfP/EgXJsp1TdvnWZMZZVap4\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 28 Oct 2025 19:45:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"upload_id\": \"897bd52f-156f-4621-809a-382872b1590e\",\n    \"status\": \"completed\",\n    \"total_records\": 180,\n    \"processed_records\": 180,\n    \"valid_records\": 172,\n    \"errors\": [\n        {\n            \"line\": 60,\n            \"field\": \"patient_cpf\",\n            \"message\": \"CPF deve ter 11 dígitos\",\n            \"value\": \"123456789AB\"\n        },\n        {\n            \"line\": 68,\n            \"field\": \"date\",\n            \"message\": \"Data não pode ser futura\",\n            \"value\": \"2026-06-03\"\n        },\n        {\n            \"line\": 81,\n            \"field\": \"duration\",\n            \"message\": \"Controlado: duração máxima 60 dias\",\n            \"value\": \"79\"\n        },\n        {\n            \"line\": 85,\n            \"field\": \"doctor_uf\",\n            \"message\": \"UF inválida\",\n            \"value\": \"SPaulo\"\n        },\n        {\n            \"line\": 115,\n            \"field\": \"notes\",\n            \"message\": \"Obrigatório para controlados\"\n        },\n        {\n            \"line\": 139,\n            \"field\": \"duration\",\n            \"message\": \"Duração máxima 90 dias\",\n            \"value\": \"95\"\n        },\n        {\n            \"line\": 158,\n            \"field\": \"duration\",\n            \"message\": \"Deve ser número positivo\",\n            \"value\": \"-10\"\n        },\n        {\n            \"line\": 161,\n            \"field\": \"medication\",\n            \"message\": \"Obrigatório\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "healthz",
+			"item": [
+				{
+					"name": "healthz",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/luan_reis/Developer/entrevista/dGVzdGU6bWV2b2JhY2tlbmQ/prescricoes_quebrado.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/api/healthz/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"healthz",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/Users/luan_reis/Developer/entrevista/dGVzdGU6bWV2b2JhY2tlbmQ/prescricoes_quebrado.csv"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/healthz/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"healthz",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "54"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"36-Oum9ZDTAI2fdmY0W8GvcKVK4rYg\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 28 Oct 2025 19:43:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"ok\",\n    \"timestamp\": \"2025-10-28T19:43:49.909Z\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
