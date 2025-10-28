@@ -1,0 +1,59 @@
+name: Deploy to Cloud Run 
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.SERVICE_ACCOUNT_KEY }}'
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev
+
+      - name: Build and Push Docker image
+        id: build
+        run: |
+          IMAGE="${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/default/${{ secrets.CLOUD_RUN_SERVICE }}:latest"
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Cloud Run
+        run: |
+
+
+          gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE }} \
+            --image="${{ steps.build.outputs.image }}" \
+            --platform=managed \
+            --region=${{ secrets.REGION }} \
+            --memory=512Mi \
+            --cpu=1 \
+            --concurrency=80 \
+            --min-instances=0 \
+            --max-instances=5 \
+            --set-env-vars="\
+              NODE_ENV=${{ secrets.NODE_ENV }}"\
+    
+      - name: Remove authentication 
+        run: |
+          gcloud run services update ${{ secrets.CLOUD_RUN_SERVICE }} \
+            --no-invoker-iam-check \
+            --project=${{ secrets.PROJECT_ID }} \
+            --region=${{ secrets.REGION }} \

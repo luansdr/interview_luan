@@ -1,0 +1,4 @@
+id;date,patient_cpf,doctor_crm,doctor_uf,medication,controlled,dosage
+RX001,2024-01-15,12345678901,123456,SP,Dipirona Sódica,false,500mg
+RX002,2024-01-16,98765432109,789012,RJ,Amoxicilina,false,875mg
+RX003,2024-01-17,11122233344,123456,SP,Lorazepam,true,1mg
